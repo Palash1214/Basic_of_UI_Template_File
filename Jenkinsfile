@@ -20,5 +20,13 @@ pipeline {
                 echo "No tests defined"
             }
         }
+        stage('Deploy') {
+            steps {
+                echo "Deploying static files..."
+
+                // Copy only required files
+                sh 'cp index.html /var/www/html/'
+                sh 'cp error.html /var/www/html/'
+            }
     }
 }
