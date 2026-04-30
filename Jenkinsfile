@@ -3,31 +3,26 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/Palash1214/Basic_of_UI_Template_File.git'
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo "No build required for static website"
+                sh 'docker build -t my-website .'
             }
         }
 
-        stage('Test') {
+        stage('Run Container') {
             steps {
-                echo "No tests defined"
+                sh '''
+                docker stop my-container || true
+                docker rm my-container || true
+                docker run -d -p 80:80 --name my-container my-website
+                '''
             }
         }
-        stage('Deploy') {
-            steps {
-                echo "Deploying static files..."
-
-                // Copy only required files
-                sh 'cp index.html /var/www/html/'
-                sh 'cp error.html /var/www/html/'
-            }
     }
-}
 }
